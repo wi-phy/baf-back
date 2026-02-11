@@ -1,0 +1,24 @@
+services:
+  baf-music-db:
+    image: postgres:18-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '${DB_PORT}:5432'
+    volumes:
+      - baf-music-db-pgdata:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${DB_USER:-myuser} -d ${DB_NAME:-mydatabase}',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  baf-music-db-pgdata: {}
