@@ -2,12 +2,11 @@ name: Deploy to Scaleway
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 env:
   REGISTRY_URL: ${{ secrets.SCW_REGISTRY_URL }}
   IMAGE_NAME: baf-back
-  CONTAINER_NAME: container-baf-music-backend
 
 jobs:
   build-and-push:
@@ -37,6 +36,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  migrate:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -53,6 +56,10 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, migrate]
+    steps:
       - name: Install Scaleway CLI
         uses: scaleway/action-scw@v0
         with:
@@ -63,4 +70,4 @@ jobs:
           default-organization-id: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
 
       - name: Redeploy Container
-        run: scw container container deploy ${{ env.CONTAINER_NAME }}
+        run: scw container container deploy ${{ secrets.SCW_CONTAINER_ID }}
