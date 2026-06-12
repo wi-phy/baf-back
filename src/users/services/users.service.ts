@@ -9,9 +9,8 @@ export class UsersService {
   /**
    * Creates a new user in the database.
    *
-   * @param {string} email - The email address of the new user.
-   * @param {string} hash - The hashed password of the new user.
-   * @returns {Promise<Omit<User, 'hash'>>} A Promise that resolves to the user object without hash.
+   * @param email - The email address of the new user.
+   * @param hash - The hashed password of the new user.
    */
   async createUser(email: string, hash: string): Promise<Omit<User, 'hash'>> {
     return await this.prismaService.user.create({
@@ -28,8 +27,7 @@ export class UsersService {
   /**
    * Retrieves a user by their email.
    *
-   * @param {string} email - The email of the user to retrieve.
-   * @returns {Promise<User>} - A promise that resolves to the user object.
+   * @param email - The email of the user to retrieve.
    */
   async getUserByEmail(email: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
