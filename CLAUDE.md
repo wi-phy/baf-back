@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> Shared conventions for both repos (Bun-only, search tools, Prettier) live in the parent `../CLAUDE.md`. This file only covers back-end specifics.
+
 ## Overview
 
 Baf-music back-end: a NestJS 11 REST API using Prisma + PostgreSQL for persistence and JWT (Passport) for auth. **Bun** is the package manager and runtime (`bun.lock`, Dockerfile, and CI all use Bun); the npm `scripts` in `package.json` invoke the Nest/Jest CLIs but should be run via `bun run ...`.
@@ -33,10 +35,6 @@ bun x prisma studio                         # browse the DB
 ```
 
 Local DB: `docker-compose up baf-music-db` brings up Postgres 18 (reads `DB_USER`/`DB_PASSWORD`/`DB_NAME`/`DB_PORT` from `.env`). `docker-compose up` runs the full app + DB.
-
-## General rules
-
-- Always use the built-in Grep, Glob, and Read tools instead of running their shell equivalents (grep, find, cat, sed) via Bash. Only fall back to Bash when there is no built-in tool for the task.
 
 ## Environment
 
